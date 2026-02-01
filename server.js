@@ -14,6 +14,7 @@ app.set("trust proxy", 1);
 
 const allowedOrigins = [
   process.env.FRONTEND_URL,
+  "https://fwab-again.vercel.app",
   "http://localhost:5173",
 ].filter(Boolean);
 
@@ -28,6 +29,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser()); 
 app.use("/api/events", eventsRouter);
