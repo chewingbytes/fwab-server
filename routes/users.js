@@ -85,11 +85,16 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1d" }
     );
 
+    const isProd =
+      process.env.NODE_ENV === "production" ||
+      (process.env.FRONTEND_URL || "").startsWith("https://");
+
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000,
+      path: "/",
     });
 
     res.status(200).json({ message: "Login successful", token });
@@ -207,15 +212,27 @@ router.patch("/update/:email", async (req, res) => {
     });
 
     if (updatedUser) {
-      res.clearCookie("token", { httpOnly: true, sameSite: "strict" });
+      const isProd =
+        process.env.NODE_ENV === "production" ||
+        (process.env.FRONTEND_URL || "").startsWith("https://");
+
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
+        path: "/",
+      });
+
       const newToken = jwt.sign({ user: updatedUser }, JWT_SECRET, {
         expiresIn: "1h",
       });
+
       res.cookie("token", newToken, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
         maxAge: 24 * 60 * 60 * 1000,
+        path: "/",
       });
     }
 

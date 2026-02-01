@@ -13,23 +13,18 @@ const PORT = process.env.PORT || 5050;
 app.set("trust proxy", 1);
 
 const allowedOrigins = [
-  "https://fwab-again.vercel.app"
-];
+  process.env.FRONTEND_URL,
+  "https://fwab-again.vercel.app",
+  "http://localhost:5173",
+].filter(Boolean);
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg =
-          "The CORS policy for this site does not allow access from the specified Origin.";
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-  }),
-);
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
