@@ -1,15 +1,28 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import eventsRouter from "./routes/events.js";
 import userRouter from "./routes/users.js";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5050;
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+].filter(Boolean);
+
 const corsOptions = {
-  origin: "http://localhost:5173", 
-  credentials: true, 
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
