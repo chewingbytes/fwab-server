@@ -14,12 +14,11 @@ try {
   console.log("Connected successfully to MongoDB");
 } catch (e) {
   console.error("Failed to connect to MongoDB", e);
-  process.exit(1); // Exit the process with an error code
+  process.exit(1); 
 }
 
 const db = conn.db("stargazing");
 
-// Optional: Use event listeners to monitor connection status
 client.on('serverOpening', () => console.log('MongoDB server connection opened'));
 client.on('serverClosed', () => console.log('MongoDB server connection closed'));
 client.on('serverDescriptionChanged', (event) =>

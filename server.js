@@ -14,7 +14,6 @@ app.set("trust proxy", 1);
 
 const allowedOrigins = [
   process.env.FRONTEND_URL,
-  "https://fwab-again.vercel.app",
   "http://localhost:5173",
 ].filter(Boolean);
 
@@ -31,7 +30,6 @@ app.use(cookieParser());
 app.use("/api/events", eventsRouter);
 app.use("/api/users", userRouter);
 
-// Start the Express server
 app.listen(PORT, () => {
   console.log(`Server is running on port: http://localhost:${PORT}`);
 });

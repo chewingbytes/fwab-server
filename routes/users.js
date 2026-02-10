@@ -118,7 +118,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get a single user by ID
 router.get("/:id", async (req, res) => {
   try {
     const collection = await db.collection("users");
@@ -141,7 +140,6 @@ router.post("/signup", async (req, res) => {
   try {
     const collection = await db.collection("users");
 
-    // Check if username or email already exists
     const existingUser = await collection.findOne({
       $or: [{ username }, { email }],
     });

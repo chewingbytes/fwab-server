@@ -4,7 +4,6 @@ import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
-// Get a list of all events
 router.get("/", async (req, res) => {
   try {
     const collection = await db.collection("events");
@@ -15,7 +14,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get a single event by ID
 router.get("/:id", async (req, res) => {
   try {
     const collection = await db.collection("events");
@@ -32,7 +30,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Create a new event
 router.post("/", async (req, res) => {
   const newEvent = {
     eventName: req.body.eventName,
@@ -43,7 +40,6 @@ router.post("/", async (req, res) => {
     description: req.body.description,
     participantsLimit: req.body.participantsLimit,
   };
-
   try {
     const collection = await db.collection("events");
     const result = await collection.insertOne(newEvent);
@@ -53,7 +49,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update an existing event by eventName
 router.patch("/update/:eventName", async (req, res) => {
   const query = { eventName: req.params.eventName };
   const updates = {
